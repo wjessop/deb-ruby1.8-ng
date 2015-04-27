@@ -1,0 +1,27 @@
+# What is this?
+# ===========================
+#
+# This is the Dockerfile for building lucid. See Dockerfile for instructions.
+#
+
+FROM ubuntu:10.04
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y bison autoconf build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm3 libgdbm-dev checkinstall git-core
+
+# Make and install Ruby
+ADD . /tmp/ruby/
+WORKDIR /tmp/ruby/
+RUN for i in `cat debian/patches/series`; do patch -p1 < debian/patches/$i; done
+RUN autoconf
+RUN ./configure --prefix=/opt/rubyree-1.8.7-2015.04
+RUN make
+RUN checkinstall --nodoc --type=debian --pkgname=ruby-ree-1.8.7-2015.04 --pkgversion=1.8.7-2015.04 --pkgrelease=37s~lucid --arch=amd64
+
+# Next up, Rubygems
+WORKDIR /tmp
+RUN git clone https://github.com/rubygems/rubygems.git
+WORKDIR /tmp/rubygems
+RUN git fetch --tags
+RUN git checkout tags/v1.8.30
+RUN checkinstall --nodoc --type=debian --pkgname=rubygems-ree --pkgversion=1.8.30-2015.04 --pkgrelease=37s~lucid --arch=amd64 /opt/rubyree-1.8.7-2015.04/bin/ruby setup.rb

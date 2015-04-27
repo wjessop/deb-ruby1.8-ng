@@ -41,6 +41,18 @@
 # total 6288
 # -rw-r--r--  1 will  staff  3061900 21 Apr 00:00 ruby-ree-1.8.7-2015.04_1.8.7-2015.04-37s~precise_amd64.deb
 # -rw-r--r--  1 will  staff   155290 21 Apr 00:00 rubygems-ree_1.8.30-2015.04-37s~precise_amd64.deb
+#
+# Building for Lucid
+# ===========================
+#
+# Same as above, but specify the lucid Dockerfile for the build command
+#
+#     docker build --rm=true --no-cache=true -f Dockerfile.lucid .
+#
+# ToDo
+# ===========================
+#
+# * Deps for packages
 
 FROM ubuntu:12.04
 RUN apt-get update

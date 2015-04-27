@@ -49,10 +49,6 @@
 #
 #     docker build --rm=true --no-cache=true -f Dockerfile.lucid .
 #
-# ToDo
-# ===========================
-#
-# * Deps for packages
 
 FROM ubuntu:12.04
 RUN apt-get update
@@ -66,7 +62,7 @@ RUN for i in `cat debian/patches/series`; do patch -p1 < debian/patches/$i; done
 RUN autoconf
 RUN ./configure --prefix=/opt/rubyree-1.8.7-2015.04
 RUN make
-RUN checkinstall --nodoc --type=debian --pkgname=ruby-ree-1.8.7-2015.04 --pkgversion=1.8.7-2015.04 --pkgrelease=37s~precise --arch=amd64
+RUN checkinstall --nodoc --type=debian --pkgname=ruby-ree-1.8.7-2015.04 --pkgversion=1.8.7-2015.04 --pkgrelease=37s~precise --arch=amd64 --requires=libstdc++6,libc6,libffi6,libgdbm3,libncurses5,libreadline6,libssl1.0.0,zlib1g
 
 # Next up, Rubygems
 WORKDIR /tmp

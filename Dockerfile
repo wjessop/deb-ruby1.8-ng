@@ -70,7 +70,9 @@ ADD . /tmp/ruby/
 WORKDIR /tmp/ruby/
 RUN for i in `cat debian/patches/series`; do patch -p1 < debian/patches/$i; done
 RUN autoconf
-RUN ./configure --prefix=/opt/rubyree-1.8.7-2015.04 --enable-pthread
+# CFLAGS to fix segfaults per
+# https://github.com/rbenv/ruby-build/wiki#187-p302-and-lower-segfaults-for-https-requests-on-os-x-107
+RUN ./configure --prefix=/opt/rubyree-1.8.7-2015.04 --enable-pthread CFLAGS="-O2 -fno-tree-dce -fno-optimize-sibling-calls"
 RUN make
 RUN checkinstall --nodoc --type=debian --pkgname=ruby-ree-1.8.7-2015.04 --pkgversion=1.8.7-2015.04 --pkgrelease=37s~trusty --arch=amd64 --requires=libstdc++6,libc6,libffi6,libgdbm3,libncurses5,libreadline6,libssl1.0.0,zlib1g
 
